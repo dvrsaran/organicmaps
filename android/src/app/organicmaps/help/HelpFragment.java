@@ -105,12 +105,12 @@ public class HelpFragment extends BaseMwmFragment implements View.OnClickListene
 
   private void onPrivacyPolicyClick()
   {
-    openLink(getResources().getString(R.string.privacy_policy_url));
+    openLink(getResources().getString(R.string.translated_om_site_url) + "policy/");
   }
 
   private void onTermOfUseClick()
   {
-    openLink(getResources().getString(R.string.terms_of_use_url));
+    openLink(getResources().getString(R.string.translated_om_site_url) + "terms/");
   }
 
   @Override
@@ -118,9 +118,9 @@ public class HelpFragment extends BaseMwmFragment implements View.OnClickListene
   {
     final int id = v.getId();
     if (id == R.id.web)
-      openLink(Constants.Url.WEB_SITE);
+      openLink(getResources().getString(R.string.translated_om_site_url));
     else if (id == R.id.news)
-      openLink(Constants.Url.NEWS);
+      openLink(getResources().getString(R.string.translated_om_site_url) + "news/");
     else if (id == R.id.email)
       Utils.sendTo(requireContext(), BuildConfig.SUPPORT_MAIL, "Organic Maps");
     else if (id == R.id.github)
@@ -142,11 +142,17 @@ public class HelpFragment extends BaseMwmFragment implements View.OnClickListene
     else if (id == R.id.report)
       Utils.sendBugReport(requireActivity(), "");
     else if (id == R.id.support_us)
-      openLink(Constants.Url.SUPPORT_US);
+      openLink(getResources().getString(R.string.translated_om_site_url) + "support-us/");
     else if (id == R.id.donate)
       openLink(mDonateUrl);
     else if (id == R.id.rate)
-      Utils.openAppInMarket(requireActivity(), BuildConfig.REVIEW_URL);
+    {
+      // Some flavors don't have review url and need to use localized donate links.
+      if (BuildConfig.REVIEW_URL.startsWith("https://organicmaps.app/donate/"))
+        openLink(getResources().getString(R.string.translated_om_site_url) + "donate/");
+      else
+        Utils.openAppInMarket(requireActivity(), BuildConfig.REVIEW_URL);
+    }
     else if (id == R.id.copyright)
       ((HelpActivity) requireActivity()).stackFragment(CopyrightFragment.class, getString(R.string.copyright), null);
   }
